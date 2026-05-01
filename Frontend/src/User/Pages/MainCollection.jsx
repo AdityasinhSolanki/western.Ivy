@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import { ToastContext } from "../../Context/ToastContext";
-import { WishlistContext } from "../../Context/wishlistContext"; // ✅ added
+import { WishlistContext } from "../../Context/WishlistContext"; 
 
 const MainProducts = ({ selectedCategory = "all" }) => {
   const [products, setProducts] = useState([]);
