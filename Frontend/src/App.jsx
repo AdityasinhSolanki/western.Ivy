@@ -34,7 +34,7 @@ import { CartProvider } from "./Context/CartContext";
 import { OrderProvider } from "./Context/OrderContext";
 import { PremiumProvider } from "./Context/PremiumContext";
 import { ToastProvider } from "./Context/ToastContext";
-import WishlistProvider from "./Context/wishlistContext";
+import WishlistProvider from "./Context/WishlistContext";
 /* ADMIN PAGES */
 
 import AdminDashboard from "./Admin/Pages/AdminDashboard";
