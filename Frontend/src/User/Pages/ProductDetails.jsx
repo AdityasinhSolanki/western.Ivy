@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import { ToastContext } from "../../Context/ToastContext";
-import { WishlistContext } from "../../Context/wishlistContext";
+import { WishlistContext } from "../../Context/WishlistContext";
 const ProductDetails = () => {
 
   const { addToCart } = useContext(CartContext);
