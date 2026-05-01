@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
-import { WishlistContext } from "../../Context/wishlistContext";
+import { WishlistContext } from "../../Context/WishlistContext";
 const Navbar = ({ onCategorySelect }) => {
   const [products, setProducts] = useState([]);
   useEffect(() => {
