@@ -4,6 +4,7 @@ import AdminNavbar from "../Components/AdminNavbar";
 
 const AdminOrders = () => {
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -69,112 +70,109 @@ const AdminOrders = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex h-screen bg-gray-100 overflow-hidden">
 
-      <AdminSidebar />
+      {/* Sidebar */}
+      <div className={`
+        fixed top-0 left-0 h-full z-50
+        transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        md:translate-x-0 transition-transform duration-300
+      `}>
+        <AdminSidebar />
+      </div>
 
-      <div className="flex-1">
+      {/* Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
 
-        <AdminNavbar />
+      {/* Main */}
+      <div className="flex-1 overflow-y-auto">
 
-        <div className="p-6">
+        <AdminNavbar toggleSidebar={() => setIsSidebarOpen(true)} />
 
-          <h2 className="text-2xl font-semibold mb-6">
+        <div className="p-4 sm:p-6">
+
+          <h2 className="text-xl sm:text-2xl font-semibold mb-6">
             Orders
           </h2>
 
-          <div className="bg-white shadow rounded-lg overflow-hidden">
+          <div className="bg-white shadow rounded-lg overflow-x-auto">
 
-            <table className="w-full text-sm">
+            <table className="min-w-[700px] w-full text-sm">
 
               <thead className="bg-gray-50 border-b">
-
                 <tr>
-
-                  <th className="p-4">Product</th>
-                  <th className="p-4">Qty</th>
-                  <th className="p-4">Customer</th>
-                  <th className="p-4">Address</th>
-                  <th className="p-4">Status</th>
-                  <th className="p-4">Actions</th>
-
+                  <th className="p-2 sm:p-4 text-left">Product</th>
+                  <th className="p-2 sm:p-4 text-left">Qty</th>
+                  <th className="p-2 sm:p-4 text-left">Customer</th>
+                  <th className="p-2 sm:p-4 text-left">Address</th>
+                  <th className="p-2 sm:p-4 text-left">Status</th>
+                  <th className="p-2 sm:p-4 text-left">Actions</th>
                 </tr>
-
               </thead>
 
               <tbody>
-
                 {orders.map(order => (
-
                   order.items.map((item, index) => (
-
                     <tr key={order._id + index} className="border-b hover:bg-gray-50">
 
-                      <td className="p-4">
-
-                        <div className="flex items-center gap-3">
-
+                      <td className="p-2 sm:p-4">
+                        <div className="flex items-center gap-2 sm:gap-3">
                           <img
                             src={item.image.replace("/src/assets", "/assets")}
                             alt={item.name}
-                            className="w-12 h-12 object-contain bg-gray-100 rounded"
+                            className="w-10 h-10 sm:w-12 sm:h-12 object-contain bg-gray-100 rounded"
                           />
-
-                          <span className="font-medium">
+                          <span className="font-medium text-sm sm:text-base">
                             {item.name}
                           </span>
-
                         </div>
-
                       </td>
 
-                      <td className="p-4">
-                        {item.quantity}
-                      </td>
+                      <td className="p-2 sm:p-4">{item.quantity}</td>
 
-                      <td className="p-4">
+                      <td className="p-2 sm:p-4">
                         {order.shippingAddress?.fullName}
                       </td>
 
-                      <td className="p-4 text-gray-600">
+                      <td className="p-2 sm:p-4 text-gray-600">
                         {order.shippingAddress?.address}, {order.shippingAddress?.city}
                       </td>
 
-                      <td className={`p-4 font-medium ${getStatusColor(order.status)}`}>
+                      <td className={`p-2 sm:p-4 font-medium ${getStatusColor(order.status)}`}>
                         {order.status}
                       </td>
 
-                      <td className="p-4 flex gap-2">
-
+                      <td className="p-2 sm:p-4 flex flex-wrap gap-2">
                         <button
                           onClick={() => updateStatus(order._id, "Shipped")}
-                          className="bg-blue-500 text-white px-3 py-1 rounded text-xs"
+                          className="bg-blue-500 text-white px-2 sm:px-3 py-1 rounded text-xs"
                         >
                           Ship
                         </button>
 
                         <button
                           onClick={() => updateStatus(order._id, "Delivered")}
-                          className="bg-green-600 text-white px-3 py-1 rounded text-xs"
+                          className="bg-green-600 text-white px-2 sm:px-3 py-1 rounded text-xs"
                         >
                           Delivered
                         </button>
 
                         <button
                           onClick={() => updateStatus(order._id, "Cancelled")}
-                          className="bg-red-500 text-white px-3 py-1 rounded text-xs"
+                          className="bg-red-500 text-white px-2 sm:px-3 py-1 rounded text-xs"
                         >
                           Cancel
                         </button>
-
                       </td>
 
                     </tr>
-
                   ))
-
                 ))}
-
               </tbody>
 
             </table>

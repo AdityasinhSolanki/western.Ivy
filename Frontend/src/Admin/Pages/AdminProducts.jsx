@@ -1,7 +1,10 @@
 import React, { useEffect, useContext, useState } from "react";
 import AdminSidebar from "../Components/AdminSidebar";
 import AdminNavbar from "../Components/AdminNavbar";
+
 const AdminProducts = () => {
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -97,7 +100,7 @@ const AdminProducts = () => {
       image: product.image,
       category: product.category,
       stock: product.stock,
-      sizes: product.sizes?.join(",") || "",  // 🔥 ADD THIS LINE
+      sizes: product.sizes?.join(",") || "",
       description: product.description
     });
 
@@ -114,9 +117,9 @@ const AdminProducts = () => {
         },
         body: JSON.stringify({
           ...formData,
-         sizes: formData.sizes
-  ? formData.sizes.split(",").map(s => s.trim()).filter(Boolean)
-  : []
+          sizes: formData.sizes
+            ? formData.sizes.split(",").map(s => s.trim()).filter(Boolean)
+            : []
         })
       });
 
@@ -152,23 +155,40 @@ const AdminProducts = () => {
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
 
-      <AdminSidebar />
+      {/* Sidebar */}
+      <div className={`
+        fixed top-0 left-0 h-full z-50
+        transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        md:translate-x-0 transition-transform duration-300
+      `}>
+        <AdminSidebar />
+      </div>
 
+      {/* Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* Main */}
       <div className="flex-1 overflow-y-auto">
 
-        <AdminNavbar />
+        <AdminNavbar toggleSidebar={() => setIsSidebarOpen(true)} />
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
 
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
 
-            <h2 className="text-2xl font-semibold">
+            <h2 className="text-xl sm:text-2xl font-semibold">
               Product Management
             </h2>
 
             <button
               onClick={() => setShowAddForm(!showAddForm)}
-              className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm"            >
+              className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded text-sm w-full sm:w-auto"
+            >
               {showAddForm ? "Close" : "Add Product"}
             </button>
 
@@ -176,71 +196,26 @@ const AdminProducts = () => {
 
           {showAddForm && (
 
-            <div className="bg-white shadow rounded p-6 mb-6">
+            <div className="bg-white shadow rounded p-4 sm:p-6 mb-6">
 
-              <h3 className="text-lg font-semibold mb-4">
+              <h3 className="text-base sm:text-lg font-semibold mb-4">
                 Add Product
               </h3>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
 
-                <input
-                  name="name"
-                  placeholder="Product Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="border p-2 rounded"
-                />
+                <input name="name" placeholder="Product Name" value={formData.name} onChange={handleChange} className="border p-2 rounded" />
+                <input name="price" placeholder="Price" value={formData.price} onChange={handleChange} className="border p-2 rounded" />
+                <input name="image" placeholder="/assets/men/example.png" value={formData.image} onChange={handleChange} className="border p-2 rounded" />
+                <input name="category" placeholder="Category" value={formData.category} onChange={handleChange} className="border p-2 rounded" />
+                <input name="stock" placeholder="Stock" value={formData.stock} onChange={handleChange} className="border p-2 rounded" />
+                <input name="sizes" placeholder="Sizes (e.g. S,M,L)" value={formData.sizes} onChange={handleChange} className="border p-2 rounded" />
 
-                <input
-                  name="price"
-                  placeholder="Price"
-                  value={formData.price}
-                  onChange={handleChange}
-                  className="border p-2 rounded"
-                />
-
-                <input
-                  name="image"
-                  placeholder="/assets/men/example.png"
-                  value={formData.image}
-                  onChange={handleChange}
-                  className="border p-2 rounded"
-                />
-
-                <input
-                  name="category"
-                  placeholder="Category"
-                  value={formData.category}
-                  onChange={handleChange}
-                  className="border p-2 rounded"
-                />
-
-                <input
-                  name="stock"
-                  placeholder="Stock"
-                  value={formData.stock}
-                  onChange={handleChange}
-                  className="border p-2 rounded"
-                />
-                <input
-                  name="sizes"
-                  placeholder="Sizes (e.g. S,M,L)"
-                  value={formData.sizes}
-                  onChange={handleChange}
-                  className="border p-2 rounded"
-                />
-                <input
-                  name="description"
-                  placeholder="Description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  className="border p-2 rounded col-span-2"
-                />
+                <input name="description" placeholder="Description" value={formData.description} onChange={handleChange} className="border p-2 rounded sm:col-span-2" />
 
                 <button
                   onClick={addProduct}
-                  className="bg-green-600 text-white py-2 rounded col-span-2"
+                  className="bg-green-600 text-white py-2 rounded sm:col-span-2"
                 >
                   Add Product
                 </button>
@@ -251,82 +226,73 @@ const AdminProducts = () => {
 
           )}
 
-          <div className="bg-white shadow rounded-lg overflow-hidden">
+          <div className="bg-white shadow rounded-lg overflow-x-auto">
 
             {loading ? (
-
               <div className="p-6 text-gray-500">
                 Loading products...
               </div>
-
             ) : (
 
-              <table className="w-full text-sm">
+              <table className="min-w-[800px] w-full text-sm">
 
                 <thead className="bg-gray-50 border-b">
-
                   <tr>
-
-                    <th className="p-4">Image</th>
-                    <th className="p-4">Product</th>
-                    <th className="p-4">Category</th>
-                    <th className="p-4">Price</th>
-                    <th className="p-4">Stock</th>
-                    <th className="p-4">Description</th>
-                    <th className="p-4">Actions</th>
-
+                    <th className="p-2 sm:p-4 text-left">Image</th>
+                    <th className="p-2 sm:p-4 text-left">Product</th>
+                    <th className="p-2 sm:p-4 text-left">Category</th>
+                    <th className="p-2 sm:p-4 text-left">Price</th>
+                    <th className="p-2 sm:p-4 text-left">Stock</th>
+                    <th className="p-2 sm:p-4 text-left">Description</th>
+                    <th className="p-2 sm:p-4 text-left">Actions</th>
                   </tr>
-
                 </thead>
 
                 <tbody>
-
                   {products.map(product => (
-
                     <React.Fragment key={product._id}>
-
                       <tr className="border-b hover:bg-gray-50">
 
-                        <td className="p-4">
+                        <td className="p-2 sm:p-4">
                           <img
                             src={product.image}
                             alt={product.name}
-                            className="w-14 h-14 object-contain rounded"
+                            className="w-12 h-12 sm:w-14 sm:h-14 object-contain rounded"
                           />
                         </td>
 
-                        <td className="p-4 font-medium">
+                        <td className="p-2 sm:p-4 font-medium">
                           {product.name}
                         </td>
 
-                        <td className="p-4">
+                        <td className="p-2 sm:p-4">
                           {product.category}
                         </td>
 
-                        <td className="p-4">
+                        <td className="p-2 sm:p-4">
                           ₹{product.price}
                         </td>
 
-                        <td className="p-4">
+                        <td className="p-2 sm:p-4">
                           {product.stock}
                         </td>
 
-                        <td className="p-4 text-gray-600 max-w-xs truncate">
+                        <td className="p-2 sm:p-4 text-gray-600 max-w-xs truncate">
                           {product.description}
                         </td>
 
-                        <td className="p-4 flex gap-2">
+                        <td className="p-2 sm:p-4 flex flex-wrap gap-2">
 
                           <button
                             onClick={() => startEdit(product)}
-                            className="bg-blue-500 text-white px-3 py-1 rounded text-xs"
+                            className="bg-blue-500 text-white px-2 sm:px-3 py-1 rounded text-xs"
                           >
                             Update
                           </button>
 
                           <button
                             onClick={() => deleteProduct(product._id)}
-                            className="bg-red-500 text-white px-3 py-1 rounded text-xs"
+                            className="bg-red-500 text-white px-2 sm:px-3 py-1 rounded text-xs"
                           >
                             Delete
                           </button>
@@ -339,25 +305,20 @@ const AdminProducts = () => {
 
                         <tr className="bg-gray-50">
 
-                          <td colSpan="7" className="p-6">
+                          <td colSpan="7" className="p-4 sm:p-6">
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
 
                               <input name="name" value={formData.name} onChange={handleChange} className="border p-2 rounded" />
                               <input name="price" value={formData.price} onChange={handleChange} className="border p-2 rounded" />
                               <input name="image" value={formData.image} onChange={handleChange} className="border p-2 rounded" />
                               <input name="category" value={formData.category} onChange={handleChange} className="border p-2 rounded" />
                               <input name="stock" value={formData.stock} onChange={handleChange} className="border p-2 rounded" />
-                              <input
-                                name="sizes"
-                                placeholder="Sizes (e.g. S,M,L)"
-                                value={formData.sizes}
-                                onChange={handleChange}
-                                className="border p-2 rounded"
-                              />
-                              <input name="description" value={formData.description} onChange={handleChange} className="border p-2 rounded col-span-2" />
+                              <input name="sizes" value={formData.sizes} onChange={handleChange} className="border p-2 rounded" />
 
-                              <div className="col-span-2 flex gap-3">
+                              <input name="description" value={formData.description} onChange={handleChange} className="border p-2 rounded sm:col-span-2" />
+
+                              <div className="col-span-1 sm:col-span-2 flex flex-col sm:flex-row gap-3">
 
                                 <button
                                   onClick={() => updateProduct(product._id)}
@@ -384,9 +345,7 @@ const AdminProducts = () => {
                       )}
 
                     </React.Fragment>
-
                   ))}
-
                 </tbody>
 
               </table>

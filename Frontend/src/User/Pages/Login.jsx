@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 const Login = () => {
 
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,35 +34,38 @@ const Login = () => {
           localStorage.setItem("user", JSON.stringify(data.user));
         }
 
-        // show toast for short time
         toast.success("Login Successful 🚀", {
           autoClose: 1000
         });
 
-        // dismiss toast before navigating
         setTimeout(() => {
 
           toast.dismiss();
 
+          const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
+
           if (data.user?.isAdmin) {
             navigate("/admin/dashboard");
           } else {
-            navigate("/");
+            navigate(redirectPath);
           }
+
+          // ✅ trigger pending action after navigation
+          setTimeout(() => {
+            window.dispatchEvent(new CustomEvent("runPendingAction"));
+          }, 100);
+
+          localStorage.removeItem("redirectAfterLogin");
 
         }, 1000);
 
       } else {
-
         toast.error(data.message);
-
       }
 
     } catch (error) {
-
       console.error(error);
       toast.error("Server Error");
-
     }
 
   }

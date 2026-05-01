@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const AdminNavbar = () => {
+const AdminNavbar = ({ toggleSidebar }) => {
 
   const navigate = useNavigate();
 
@@ -16,13 +16,25 @@ const AdminNavbar = () => {
   };
 
   return (
-    <div className="w-full bg-white border-b px-6 py-4 flex justify-between items-center">
+    <div className="w-full bg-white border-b px-4 sm:px-6 py-4 flex justify-between items-center">
 
-      <h1 className="text-lg font-semibold">
-        Western Ivy Admin
-      </h1>
+      <div className="flex items-center gap-3">
 
-      <div className="flex items-center gap-6 text-sm">
+        {/* ✅ Mobile menu button */}
+        <button
+          onClick={toggleSidebar}
+          className="md:hidden text-xl"
+        >
+          ☰
+        </button>
+
+        <h1 className="text-base sm:text-lg font-semibold">
+          Western Ivy Admin
+        </h1>
+
+      </div>
+
+      <div className="flex items-center gap-4 sm:gap-6 text-xs sm:text-sm">
 
         <button
           onClick={handleVisitSite}

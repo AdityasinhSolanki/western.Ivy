@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import { ToastContext } from "../../Context/ToastContext";
 import { WishlistContext } from "../../Context/WishlistContext";
+
 const ProductDetails = () => {
 
   const { addToCart } = useContext(CartContext);
@@ -45,6 +46,34 @@ const ProductDetails = () => {
     setReviews(saved);
   }, [product]);
 
+  // ✅ RUN PENDING ACTION AFTER LOGIN
+  useEffect(() => {
+    const handler = () => {
+      const pendingAction = JSON.parse(localStorage.getItem("pendingAction"));
+
+      if (!pendingAction) return;
+
+      if (pendingAction.type === "addToCart") {
+        addToCart({
+          ...pendingAction.product,
+          size: pendingAction.size
+        });
+        showToast("Added to Cart", "success");
+      }
+
+      if (pendingAction.type === "wishlist") {
+        addToWishlist(pendingAction.product);
+        showToast("Added to Wishlist", "success");
+      }
+
+      localStorage.removeItem("pendingAction");
+    };
+
+    window.addEventListener("runPendingAction", handler);
+
+    return () => window.removeEventListener("runPendingAction", handler);
+  }, []);
+
   if (!product) {
     return (
       <div className="text-center mt-20">
@@ -62,7 +91,22 @@ const ProductDetails = () => {
     );
   }
 
+  // ✅ UPDATED ADD TO CART
   const handleAddToCart = () => {
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      localStorage.setItem("redirectAfterLogin", window.location.pathname);
+      localStorage.setItem("pendingAction", JSON.stringify({
+        type: "addToCart",
+        product,
+        size: selectedSize
+      }));
+
+      navigate("/login");
+      return;
+    }
 
     if (!selectedSize) {
       showToast("Please select a size", "error");
@@ -167,6 +211,20 @@ const ProductDetails = () => {
               {/* ❤️ Wishlist */}
               <button
                 onClick={() => {
+
+                  const token = localStorage.getItem("token");
+
+                  if (!token) {
+                    localStorage.setItem("redirectAfterLogin", window.location.pathname);
+                    localStorage.setItem("pendingAction", JSON.stringify({
+                      type: "wishlist",
+                      product
+                    }));
+
+                    navigate("/login");
+                    return;
+                  }
+
                   if (isWishlisted) {
                     removeFromWishlist(product);
                     showToast("Removed from Wishlist");

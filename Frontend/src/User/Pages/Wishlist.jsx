@@ -1,10 +1,13 @@
 import React, { useContext } from "react";
 import { WishlistContext } from "../../Context/WishlistContext";
+import { CartContext } from "../../Context/CartContext";
+import { ToastContext } from "../../Context/ToastContext";
 
 const Wishlist = () => {
   const { wishlist, removeFromWishlist } = useContext(WishlistContext);
+  const { addToCart } = useContext(CartContext);
+  const { showToast } = useContext(ToastContext);
 
-  // use wishlist directly (no ProductContext, no filter)
   const wishlistProducts = wishlist;
 
   return (
@@ -49,6 +52,18 @@ const Wishlist = () => {
                   </button>
 
                 </div>
+
+                {/* ✅ NEW BUTTON */}
+                <button
+                  onClick={() => {
+                    addToCart({ ...p, size: "M" }); // default size (you can improve later)
+                    removeFromWishlist(p._id);
+                    showToast("Moved to Cart", "success");
+                  }}
+                  className="w-full mt-3 bg-black text-white py-2 rounded text-sm hover:bg-gray-800 transition"
+                >
+                  Move to Cart 🛒
+                </button>
 
               </div>
 

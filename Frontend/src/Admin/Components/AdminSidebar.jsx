@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 
 const AdminSidebar = () => {
   return (
-    <div className="w-60 h-screen bg-black text-white p-6">
+    <div className="w-60 h-full md:h-screen bg-black text-white p-6">
 
-      <h2 className="text-2xl font-bold mb-10">
+      <h2 className="text-xl sm:text-2xl font-bold mb-8 sm:mb-10">
         Admin
       </h2>
 
-      <nav className="flex flex-col gap-4">
+      <nav className="flex flex-col gap-4 text-sm sm:text-base">
 
         <Link
           to="/admin/dashboard"

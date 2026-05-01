@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 import { ToastContext } from "../../Context/ToastContext";
-import { WishlistContext } from "../../Context/WishlistContext"; 
+import { WishlistContext } from "../../Context/WishlistContext";
 
 const MainProducts = ({ selectedCategory = "all" }) => {
   const [products, setProducts] = useState([]);
@@ -216,6 +216,20 @@ const MainProducts = ({ selectedCategory = "all" }) => {
                 {/* ❤️ Wishlist */}
                 <button
                   onClick={() => {
+
+                    const token = localStorage.getItem("token");
+
+                    if (!token) {
+                      localStorage.setItem("redirectAfterLogin", window.location.pathname);
+                      localStorage.setItem("pendingAction", JSON.stringify({
+                        type: "wishlist",
+                        product: p
+                      }));
+
+                      window.location.href = "/login";
+                      return;
+                    }
+
                     if (isWishlisted) {
                       removeFromWishlist(p._id);
                       showToast("Removed from Wishlist");
@@ -252,6 +266,20 @@ const MainProducts = ({ selectedCategory = "all" }) => {
 
                     <button
                       onClick={() => {
+
+                        const token = localStorage.getItem("token");
+
+                        if (!token) {
+                          localStorage.setItem("redirectAfterLogin", window.location.pathname);
+                          localStorage.setItem("pendingAction", JSON.stringify({
+                            type: "addToCart",
+                            product: p
+                          }));
+
+                          window.location.href = "/login";
+                          return;
+                        }
+
                         addToCart(p);
                         showToast("Added to Cart");
                       }}
