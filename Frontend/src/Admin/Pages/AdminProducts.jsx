@@ -27,7 +27,7 @@ const AdminProducts = () => {
 
     try {
 
-      const res = await fetch("http://localhost:5050/api/products");
+      const res = await fetch("https://western-ivy.onrender.com/api/products");
       const data = await res.json();
 
       if (res.ok) {
@@ -55,7 +55,7 @@ const AdminProducts = () => {
 
     try {
 
-      await fetch("http://localhost:5050/api/products", {
+      await fetch("https://western-ivy.onrender.com/api/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -107,7 +107,7 @@ const AdminProducts = () => {
 
     try {
 
-      await fetch(`http://localhost:5050/api/products/${id}`, {
+      await fetch(`https://western-ivy.onrender.com/api/products/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -137,7 +137,7 @@ const AdminProducts = () => {
 
     try {
 
-      await fetch(`http://localhost:5050/api/products/${id}`, {
+      await fetch(`https://western-ivy.onrender.com/api/products/${id}`, {
         method: "DELETE"
       });
 

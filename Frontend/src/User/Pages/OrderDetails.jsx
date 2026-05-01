@@ -14,7 +14,7 @@ const OrderDetails = () => {
 
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:5050/api/orders/myorders", {
+        const res = await fetch("https://western-ivy.onrender.com/api/orders/myorders", {
           headers: {
             Authorization: `Bearer ${token}`
           }

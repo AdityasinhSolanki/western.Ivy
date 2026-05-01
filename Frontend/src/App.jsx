@@ -58,7 +58,7 @@ function AppContent({ selectedCategory, setSelectedCategory }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5050/api/products")
+    fetch("https://western-ivy.onrender.com/api/products")
       .then(res => res.json())
       .then(data => setProducts(data));
   }, []);

@@ -25,7 +25,7 @@ const ProductDetails = () => {
     if (location.state?.product) {
       setProduct(location.state.product);
     } else {
-      fetch(`http://localhost:5050/api/products/${id}`)
+      fetch(`https://western-ivy.onrender.com/api/products/${id}`)
         .then(res => res.json())
         .then(data => setProduct(data))
         .catch(err => console.error(err));

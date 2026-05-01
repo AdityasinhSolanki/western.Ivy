@@ -36,7 +36,7 @@ const Signup = () => {
 
     try {
 
-      const res = await fetch("http://localhost:5050/api/auth/signup", {
+      const res = await fetch("https://western-ivy.onrender.com/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

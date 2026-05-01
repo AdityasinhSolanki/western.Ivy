@@ -14,7 +14,7 @@ const Orders = () => {
 
         const token = localStorage.getItem("token");
 
-        const res = await fetch("http://localhost:5050/api/orders/myorders", {
+        const res = await fetch("https://western-ivy.onrender.com/api/orders/myorders", {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -40,7 +40,7 @@ const Orders = () => {
 
       const token = localStorage.getItem("token");
 
-      await fetch(`http://localhost:5050/api/orders/${orderId}/status`, {
+      await fetch(`https://western-ivy.onrender.com/api/orders/${orderId}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

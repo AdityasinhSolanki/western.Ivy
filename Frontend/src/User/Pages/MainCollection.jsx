@@ -23,7 +23,7 @@ const MainProducts = ({ selectedCategory = "all" }) => {
 
 
   useEffect(() => {
-    fetch("http://localhost:5050/api/products")
+    fetch("https://western-ivy.onrender.com/api/products")
       .then(res => res.json())
       .then(data => {
         console.log(data);

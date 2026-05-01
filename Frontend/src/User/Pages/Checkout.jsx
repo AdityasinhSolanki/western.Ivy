@@ -85,7 +85,7 @@ const Checkout = () => {
       const token = localStorage.getItem("token");
 
       if (premiumPlan) {
-        await fetch("http://localhost:5050/api/premium/activate", {
+        await fetch("https://western-ivy.onrender.com/api/premium/activate", {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -121,7 +121,7 @@ const Checkout = () => {
         shippingAddress: formData,
       };
 
-      const res = await fetch("http://localhost:5050/api/orders", {
+      const res = await fetch("https://western-ivy.onrender.com/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -5,7 +5,7 @@ import { WishlistContext } from "../../Context/WishlistContext";
 const Navbar = ({ onCategorySelect }) => {
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5050/api/products")
+    fetch("https://western-ivy.onrender.com/api/products")
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error(err));

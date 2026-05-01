@@ -16,7 +16,7 @@ const AdminDashboard = () => {
     async function fetchDashboard() {
 
       try {
-        const res = await fetch("http://localhost:5050/api/products");
+        const res = await fetch("https://western-ivy.onrender.com/api/products");
         const products = await res.json();
 
         setStats(prev => ({
@@ -32,7 +32,7 @@ const AdminDashboard = () => {
 
         const token = localStorage.getItem("token");
 
-        const ordersRes = await fetch("http://localhost:5050/api/orders", {
+        const ordersRes = await fetch("https://western-ivy.onrender.com/api/orders", {
           headers: {
             Authorization: `Bearer ${token}`
           }
