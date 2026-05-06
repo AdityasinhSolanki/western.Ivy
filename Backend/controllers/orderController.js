@@ -14,7 +14,7 @@ export const placeOrder = async (req, res) => {
     }
 
     const order = new Order({
-      user: req.user._id,
+      user: req.user,
       items: items.map(item => ({
         ...item,
         image: item.image ? item.image.replace("/src/assets", "/assets") : ""
@@ -27,13 +27,13 @@ export const placeOrder = async (req, res) => {
     const createdOrder = await order.save();
 
     await User.findByIdAndUpdate(
-      req.user._id,
+      req.user,
       { address: shippingAddress },
       { new: true }
     );
 
     // 👉 AFTER response → do email
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user);
 
     res.status(201).json(createdOrder);
 
