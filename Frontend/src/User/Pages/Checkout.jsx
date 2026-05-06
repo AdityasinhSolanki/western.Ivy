@@ -121,14 +121,23 @@ const Checkout = () => {
         shippingAddress: formData,
       };
 
-      fetch("https://western-ivy.onrender.com/api/orders", {
+      const res = await fetch("https://western-ivy.onrender.com/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(orderData),
-      }).catch((err) => console.log(err));
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.log(data);
+        showToast(data.message || "Order failed", "error");
+        setLoading(false);
+        return;
+      }
 
       const user = JSON.parse(localStorage.getItem("user"));
 
