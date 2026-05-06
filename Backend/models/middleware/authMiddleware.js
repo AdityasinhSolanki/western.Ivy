@@ -19,7 +19,7 @@ const protect = (req, res, next) => {
     next()
 
   } catch (error) {
-    res.status(401).json({ message: "Token failed" })
+    res.status(401).json({ message: "Login first..." })
   }
 
 }

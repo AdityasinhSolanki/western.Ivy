@@ -14,10 +14,10 @@ export const placeOrder = async (req, res) => {
     }
 
     const order = new Order({
-      user: req.user,
+      user: req.user._id,
       items: items.map(item => ({
         ...item,
-        image: item.image.replace("/src/assets", "/assets")
+        image: item.image ? item.image.replace("/src/assets", "/assets") : ""
       })),
       totalPrice,
       paymentMethod,
@@ -27,23 +27,31 @@ export const placeOrder = async (req, res) => {
     const createdOrder = await order.save();
 
     await User.findByIdAndUpdate(
-      req.user,
+      req.user._id,
       { address: shippingAddress },
       { new: true }
     );
 
-
-    const user = await User.findById(req.user);
-
-    if (user) {
-      await sendOrderEmail(user.email, createdOrder);
-    }
-
+    // 👉 AFTER response → do email
+    const user = await User.findById(req.user._id);
 
     res.status(201).json(createdOrder);
 
+    if (user) {
+      sendOrderEmail(user.email, createdOrder)
+        .catch(err => console.log("Email error:", err));
+    }
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+
+    console.log("ORDER ERROR:");
+    console.log(error);
+
+    res.status(500).json({
+      message: error.message,
+      stack: error.stack
+    });
+
   }
 };
 

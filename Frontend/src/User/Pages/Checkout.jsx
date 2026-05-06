@@ -31,9 +31,9 @@ const Checkout = () => {
   const rawSubtotal = premiumPlan
     ? premiumPrice
     : cartItems.reduce(
-        (acc, item) => acc + item.price * (item.quantity || 1),
-        0
-      );
+      (acc, item) => acc + item.price * (item.quantity || 1),
+      0
+    );
 
   const discount = isPremium && !premiumPlan ? rawSubtotal * 0.1 : 0;
 
@@ -49,9 +49,9 @@ const Checkout = () => {
 
   const validateForm = () => {
     if (!premiumPlan) {
-      const { fullName, phone, address, city, state, pincode } = formData;
+      const { fullName, phone, email, address, city, state, pincode } = formData;
 
-      if (!fullName || !phone || !address || !city || !state || !pincode) {
+      if (!fullName || !phone || !email || !address || !city || !state || !pincode) {
         showToast("Please fill all required fields.", "error");
         return false;
       }
@@ -121,22 +121,14 @@ const Checkout = () => {
         shippingAddress: formData,
       };
 
-      const res = await fetch("https://western-ivy.onrender.com/api/orders", {
+      fetch("https://western-ivy.onrender.com/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(orderData),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        showToast(data.message || "Order failed", "error");
-        setLoading(false);
-        return;
-      }
+      }).catch((err) => console.log(err));
 
       const user = JSON.parse(localStorage.getItem("user"));
 
@@ -149,12 +141,14 @@ const Checkout = () => {
 
       showToast("Order placed successfully!", "success");
 
+      setLoading(false);
+
       navigate("/payment-success", {
         state: { premiumPlan },
       });
 
     } catch (error) {
-      console.error(error);
+      console.error("FRONTEND ERROR:", error);
       showToast("Server error", "error");
     }
 
@@ -183,7 +177,7 @@ const Checkout = () => {
             <div className="space-y-4">
               <input type="text" name="fullName" placeholder="Full Name *" value={formData.fullName} onChange={handleChange} className="w-full border border-gray-300 p-3 rounded-lg" />
               <input type="tel" name="phone" placeholder="Phone Number *" value={formData.phone} onChange={handleChange} className="w-full border border-gray-300 p-3 rounded-lg" />
-              <input type="email" name="email" placeholder="Email (optional)" value={formData.email} onChange={handleChange} className="w-full border border-gray-300 p-3 rounded-lg" />
+              <input type="email" name="email" placeholder="Email *" value={formData.email} onChange={handleChange} className="w-full border border-gray-300 p-3 rounded-lg" />
               <input type="text" name="address" placeholder="Address *" value={formData.address} onChange={handleChange} className="w-full border border-gray-300 p-3 rounded-lg" />
 
               <div className="grid grid-cols-2 gap-4">
@@ -239,11 +233,10 @@ const Checkout = () => {
                 <div
                   key={option}
                   onClick={() => setMethod(option)}
-                  className={`border rounded-xl p-4 cursor-pointer ${
-                    method === option
-                      ? "border-black bg-gray-100"
-                      : "border-gray-300"
-                  }`}
+                  className={`border rounded-xl p-4 cursor-pointer ${method === option
+                    ? "border-black bg-gray-100"
+                    : "border-gray-300"
+                    }`}
                 >
                   {option}
                 </div>
@@ -259,8 +252,8 @@ const Checkout = () => {
             {loading
               ? "Processing..."
               : premiumPlan
-              ? "Activate Membership"
-              : "Pay Now"}
+                ? "Activate Membership"
+                : "Pay Now"}
           </button>
         </div>
       </div>
