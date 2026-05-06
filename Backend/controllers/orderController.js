@@ -38,11 +38,22 @@ export const placeOrder = async (req, res) => {
     res.status(201).json(createdOrder);
 
   if (user) {
+
   console.log("SENDING EMAIL TO:", user.email);
 
-  await sendOrderEmail(user.email, createdOrder);
+  try {
 
-  console.log("EMAIL FUNCTION FINISHED");
+    await sendOrderEmail(user.email, createdOrder);
+
+    console.log("EMAIL SENT SUCCESSFULLY");
+
+  } catch (err) {
+
+    console.log("EMAIL ERROR:");
+    console.log(err);
+
+  }
+
 }
 
   } catch (error) {
