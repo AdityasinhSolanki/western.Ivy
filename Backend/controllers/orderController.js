@@ -37,10 +37,13 @@ export const placeOrder = async (req, res) => {
 
     res.status(201).json(createdOrder);
 
-    if (user) {
-      sendOrderEmail(user.email, createdOrder)
-        .catch(err => console.log("Email error:", err));
-    }
+  if (user) {
+  console.log("SENDING EMAIL TO:", user.email);
+
+  await sendOrderEmail(user.email, createdOrder);
+
+  console.log("EMAIL FUNCTION FINISHED");
+}
 
   } catch (error) {
 
