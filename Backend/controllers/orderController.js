@@ -35,26 +35,26 @@ export const placeOrder = async (req, res) => {
     // 👉 SEND EMAIL
     const user = await User.findById(req.user);
 
-    if (user) {
+   if (user) {
 
-      console.log("SENDING EMAIL TO:", user.email);
+  console.log("SENDING EMAIL TO:", user.email);
 
-      try {
+  try {
 
-        await sendOrderEmail(user.email, createdOrder);
+    await sendOrderEmail(user.email, createdOrder);
 
-        console.log("EMAIL SENT SUCCESSFULLY");
+    console.log("EMAIL SENT SUCCESSFULLY");
 
-      } catch (err) {
+  } catch (err) {
 
-        console.log("EMAIL ERROR:");
-        console.log(err);
+    console.log("EMAIL ERROR:");
+    console.log(err);
 
-      }
+  }
 
-    }
+}
 
-    res.status(201).json(createdOrder);
+res.status(201).json(createdOrder);
 
   } catch (error) {
 
