@@ -54,7 +54,7 @@ export const placeOrder = async (req, res) => {
 
 }
 
-res.status(201).json(createdOrder);
+res.status(201).json(createdOrder);MovieR
 
   } catch (error) {
 
